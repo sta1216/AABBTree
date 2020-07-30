@@ -50,7 +50,8 @@ namespace Beam
             // find nodes by planes
             var normal = new Vector3(1, 1, 1);
             normal.normalize();
-            var plane = new Plane3(normal.X, normal.Y, normal.Z, 20);
+            var plane = new Plane3(normal.X, normal.Y, normal.Z, -20);
+			normal.negative();
             var plane2 = new Plane3(normal.X, normal.Y, normal.Z, -60);
             count = tree.getVisibleNodes(new Plane3[] { plane, plane2 }, overlappingNodes);
             Console.WriteLine($"Node Count:{count}");

@@ -262,12 +262,22 @@ namespace Beam
                     }
                 }
 
-                //insert node at index i
-                priorityList.Add(new PriorityNode() {
-                    tree = tree,
-                    nodeIndex = nodeIndex,
-                    distance = distance.Value
-                });
+				if(i== length - 1){
+					//insert node at index i
+					priorityList.Add(new PriorityNode() {
+						tree = tree,
+						nodeIndex = nodeIndex,
+						distance = distance.Value
+					});
+				} 
+				else {
+					//insert node at index i
+					priorityList.Insert(i+1, new PriorityNode() {
+						tree = tree,
+						nodeIndex = nodeIndex,
+						distance = distance.Value
+					});
+				}
             }
 
             return upperBound;

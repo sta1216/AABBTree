@@ -7,6 +7,7 @@ namespace Beam
     {
         static void Main(string[] args)
         {
+            // build tree
             var tree = new AABBTree(true);
             tree.add(new AABBExternalNode() { Data = 1 }, new AABBBox(new Point3(0, 0, 0), new Point3(10, 10, 10)));
             tree.add(new AABBExternalNode() { Data = 2 }, new AABBBox(new Point3(5, 5, 5), new Point3(15, 15, 15)));
@@ -21,6 +22,7 @@ namespace Beam
 
             // remove 
             tree.remove(node);
+            tree.update(lastNode, new AABBBox(new Point3(51, 51, 51), new Point3(61, 61, 61)));
             tree.finalize();
 
             // get parent
@@ -48,12 +50,9 @@ namespace Beam
             overlappingNodes.Clear();
 
             // find nodes by planes
-            var normal = new Vector3(1, 1, 1);
-            normal.normalize();
+            var normal = new Vector3(0, 0, 1);
             var plane = new Plane3(normal.X, normal.Y, normal.Z, -20);
-			normal.negative();
-            var plane2 = new Plane3(normal.X, normal.Y, normal.Z, -60);
-            count = tree.getVisibleNodes(new Plane3[] { plane, plane2 }, overlappingNodes);
+            count = tree.getVisibleNodes(new Plane3[] { plane }, overlappingNodes);
             Console.WriteLine($"Node Count:{count}");
             overlappingNodes.ForEach(node => node.Print());
             overlappingNodes.Clear();

@@ -13,10 +13,9 @@ namespace Beam
             tree.add(new AABBExternalNode() { Data = 3 }, new AABBBox(new Point3(20, 20, 20), new Point3(30, 30, 30)));
             tree.add(new AABBExternalNode() { Data = 4 }, new AABBBox(new Point3(40, 40, 40), new Point3(50, 50, 50)));
             var node = new AABBExternalNode() { Data = 6 };
-            var box = new AABBBox(new Point3(50, 50, 50), new Point3(60, 60, 60));
-            tree.add(node, box);
+            tree.add(node, new AABBBox(new Point3(50, 50, 50), new Point3(60, 60, 60)));
             var lastNode = new AABBExternalNode() { Data = 5 };
-            tree.add(lastNode, new AABBBox(new Point3(50, 50, 50), new Point3(60, 60, 60)));
+            tree.add(lastNode, new AABBBox(new Point3(51, 51, 51), new Point3(60, 60, 60)));
 
             tree.finalize();
 
@@ -26,6 +25,7 @@ namespace Beam
 
             // get parent
             var parent = tree.findParent(lastNode.spatialIndex);
+            var children = tree.findChildren(1);
 
             // get all the overlapping pairs
             List<AABBExternalNode> overlappingNodes = new List<AABBExternalNode>();

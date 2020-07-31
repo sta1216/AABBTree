@@ -63,7 +63,7 @@ namespace Beam
             for (int i = 0; i < trees.Length; i += 1)
             {
                 AABBTree tree = trees[i];
-                if (tree.getEndNodeIndex() != 0)
+                if (tree.getNodeCount() != 0)
                 {
                     upperBound = processNode(tree, ray, 0, upperBound, callback, ref priorityList, ref minimumResult);
                 }
@@ -262,7 +262,7 @@ namespace Beam
                     }
                 }
 
-				if(i== length - 1){
+				if(i>= length - 1){
 					//insert node at index i
 					priorityList.Add(new PriorityNode() {
 						tree = tree,

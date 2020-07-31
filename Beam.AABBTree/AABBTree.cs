@@ -41,7 +41,7 @@ namespace Beam
 
         public void add(AABBExternalNode externalNode, AABBBox extents)
         {
-            var endNode = this.getEndNodeIndex();
+            var endNode = this.getNodeCount();
             externalNode.spatialIndex = endNode - 1;
 
             var node = new AABBTreeNode(new AABBBox(), 1, null);
@@ -72,7 +72,7 @@ namespace Beam
                     Debug.Assert(nodes[index].externalNode == externalNode);
                     nodes[index].clear();
 
-                    var endNode = this.getEndNodeIndex();
+                    var endNode = this.getNodeCount();
                     if ((index + 1) >= endNode)
                     {
                         while (nodes[endNode - 1].externalNode == null) // No leaf
@@ -114,6 +114,26 @@ namespace Beam
             }
             while (parent.escapeNodeOffset <= nodeDist);
             return parent;
+        }
+
+        public IList<AABBTreeNode> findChildren(int nodeIndex)
+        {
+            var node = this.nodes[nodeIndex];
+            if(node.externalNode != null || node.escapeNodeOffset <= 1)
+            {
+                return null;
+            }
+
+            var children = new List<AABBTreeNode>();
+            int currentIndex = nodeIndex + 1;
+            while(currentIndex < nodeIndex + node.escapeNodeOffset)
+            {
+                var currentNode = this.nodes[currentIndex];
+                children.Add(currentNode);
+                currentIndex += currentNode.escapeNodeOffset;
+            }
+
+            return children;
         }
 
         public void update(AABBExternalNode externalNode, AABBBox extents)
@@ -342,7 +362,7 @@ namespace Beam
                 else
                 {
                     buildNodes = new List<AABBTreeNode>(this.numExternalNodes);
-                    endNodeIndex = this.getEndNodeIndex();
+                    endNodeIndex = this.getNodeCount();
                     for (int n = 0; n < endNodeIndex; n += 1)
                     {
                         var currentNode = nodes[n];
@@ -559,7 +579,7 @@ namespace Beam
             if (this.numExternalNodes > 0)
             {
                 var nodes = this.nodes;
-                var endNodeIndex = this.getEndNodeIndex();
+                var endNodeIndex = this.getNodeCount();
                 var numPlanes = planes.Length;
                 AABBTreeNode node;
                 AABBBox extents;
@@ -681,7 +701,7 @@ namespace Beam
                 var queryMaxY = queryExtents[4];
                 var queryMaxZ = queryExtents[5];
                 var nodes = this.nodes;
-                var endNodeIndex = this.getEndNodeIndex();
+                var endNodeIndex = this.getNodeCount();
                 AABBTreeNode node;
                 AABBBox extents;
                 int endChildren;
@@ -773,7 +793,7 @@ namespace Beam
                 var centerY = center[1];
                 var centerZ = center[2];
                 var nodes = this.nodes;
-                var endNodeIndex = this.getEndNodeIndex();
+                var endNodeIndex = this.getNodeCount();
                 AABBTreeNode node;
                 AABBBox extents;
                 var numOverlappingNodes = 0;
@@ -854,7 +874,7 @@ namespace Beam
             if (this.numExternalNodes > 0)
             {
                 var nodes = this.nodes;
-                var endNodeIndex = this.getEndNodeIndex();
+                var endNodeIndex = this.getNodeCount();
                 AABBTreeNode currentNode;
                 AABBExternalNode currentExternalNode;
                 AABBTreeNode node;
@@ -945,7 +965,7 @@ namespace Beam
             return this.nodes;
         }
 
-        public int getEndNodeIndex()
+        public int getNodeCount()
         {
             return this.nodes.Count;
         }
